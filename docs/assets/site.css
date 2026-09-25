@@ -105,6 +105,21 @@ details.menu nav .btn{display:flex;margin-top:16px;border:0;color:#fff}
 .ticks svg{width:19px;height:19px;color:var(--red);flex:none;margin-top:3px}
 .hero-card .btns .btn{flex:1 1 180px}
 
+/* lead form (home hero = .qform, contact page = .form) */
+.qform,.form{display:flex;flex-wrap:wrap;gap:10px 12px}
+.form{margin:18px 0 1.5em}
+.form h2{flex:1 1 100%;font-size:2rem;margin:0 0 4px}
+.fl{flex:1 1 100%;display:flex;flex-direction:column;gap:3px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+.fl.half{flex:1 1 140px}
+.fl input,.fl textarea{font:inherit;font-size:16px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);background:#fff;border:1px solid #bdb7ae;border-radius:0;padding:10px 12px;width:100%}
+.fl textarea{resize:vertical;min-height:64px}
+.fl input:focus,.fl textarea:focus{outline:3px solid var(--gold);outline-offset:0;border-color:var(--ink)}
+.qform .btn,.form .btn{flex:1 1 100%;margin-top:4px}
+.fine{flex:1 1 100%;margin:2px 0 0;font-size:.78rem!important;color:var(--muted)!important;line-height:1.45}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.hero-card .or{text-align:center;margin:12px 0 0;font-weight:600}
+.hero-card .or a{white-space:nowrap}
+
 /* service strip */
 .strip{display:grid;background:var(--red);border-bottom:7px solid var(--gold);margin-top:26px;position:relative;z-index:3}
 .strip a{display:flex;align-items:center;gap:16px;padding:16px 22px;color:#fff;text-decoration:none;font-family:var(--head);font-weight:600;font-size:1.7rem;letter-spacing:.03em;text-transform:uppercase;line-height:1}

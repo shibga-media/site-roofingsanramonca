@@ -900,7 +900,11 @@ This policy explains what information CJ's Roofing ("we", "us") collects through
 
 ## What we collect
 
-This website has no contact form, no user accounts and no advertising or analytics tracking. Calls to the phone number on this site go through a call-tracking service and may be recorded for quality purposes; callers hear a short notice first. We collect information only when you choose to contact us by phone, text message or email. That may include your name, phone number, email address, property address, photos of your roof, and whatever details you choose to send.
+This website has no user accounts and no advertising or analytics tracking. Calls to the phone number on this site go through a call-tracking service and may be recorded for quality purposes; callers hear a short notice first. We collect information only when you choose to contact us by phone, text message, email or the estimate request form on this site. That may include your name, phone number, email address, zip code or property address, photos of your roof, and whatever details you choose to send.
+
+## The estimate request form
+
+The form on our home page and contact page asks for your name, phone number, zip code, a short description of what you need and, on the contact page, your email address. It also records which page you sent it from. When you press send, your request goes to a form handler run for us by Shibga Media, the marketing company that manages this website. The handler checks the request for spam, emails it to CJ's Roofing, and keeps a record of it (with your IP address and browser type, for spam and abuse checks) so no request goes missing. Those records are used only to deliver and track requests to CJ's Roofing, and are never sold.
 
 Like most websites, our hosting provider may automatically record standard technical information such as IP address, browser type and the pages requested, for security and to keep the site running.
 

@@ -25,12 +25,12 @@ INDEXABLE = False
 # ---------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------
-# CONTACT FORM — deliberately OFF. A form with no working handler loses leads.
-# To add one later: set CONTACT_FORM to a dict like
-#   {"action": "https://<form handler URL>", "subject": "Shibga Media Leads"}
-# The handler must email customerservice@cjs-roofing.com with that subject and
-# redirect to /thank-you/. The form then appears in the home hero card and on /contact-us/.
-CONTACT_FORM = None
+# CONTACT FORM — posts to our lead handler on Hetzner (shibga-os: automations/webform/, site id
+# "cjs-roofing"). The handler checks for spam, emails the lead to CJ's Roofing ("New Lead: <page>"),
+# adds a row to the web-form tracking sheet, and redirects to /thank-you/. Who gets the email is set
+# there (sites.yaml), not here. Same fields as every Shibga PPL form. Set to None to hide the form.
+# Short version in the home hero card, full version on /contact-us/.
+CONTACT_FORM = {"action": "https://desk.5-223-88-156.sslip.io/webform/cjs-roofing"}
 # ---------------------------------------------------------------------------
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -250,18 +250,33 @@ def contact_cards():
     return out + contact_form()
 
 
-def contact_form():
+def contact_form(short=False):
+    """The lead form. Field names match every Shibga PPL form (name, email, phone, zipcode, message).
+    `website` is a honeypot; page_url / page_title / t_ms are filled by the one-line script below."""
     if not CONTACT_FORM:
-        return ""   # <- form goes here once a working handler exists (see CONTACT_FORM at the top)
-    f = CONTACT_FORM
-    return (f'<form class="card form" method="post" action="{E(f["action"])}"><h2>Send a message</h2>'
-            f'<input type="hidden" name="_subject" value="{E(f["subject"])}">'
-            f'<input type="hidden" name="_next" value="{DOMAIN}/thank-you/">'
-            '<p><label>Name<br><input name="name" required autocomplete="name"></label></p>'
-            '<p><label>Phone<br><input name="phone" type="tel" required autocomplete="tel"></label></p>'
-            '<p><label>Email<br><input name="email" type="email" autocomplete="email"></label></p>'
-            '<p><label>Address and what you need<br><textarea name="message" rows="5"></textarea></label></p>'
-            '<p><button class="btn pri" type="submit">Send</button></p></form>')
+        return ""
+    fid = "qf" if short else "cf"
+    def fld(name, label, typ="text", auto="", req=True, half=False):
+        a = f' autocomplete="{auto}"' if auto else ""
+        r = " required" if req else ""
+        extra = ' inputmode="numeric" pattern="[0-9]{5}" maxlength="5"' if name == "zipcode" else ""
+        return (f'<label class="fl{" half" if half else ""}"><span>{label}</span>'
+                f'<input id="{fid}-{name}" name="{name}" type="{typ}"{a}{r}{extra}></label>')
+    email = "" if short else fld("email", "Email", "email", "email")
+    head = "" if short else "<h2>Request a free estimate</h2>"
+    return (f'<form class="{"qform" if short else "card form"}" id="{fid}" method="post" action="{E(CONTACT_FORM["action"])}">{head}'
+            + fld("name", "Full name", auto="name")
+            + email
+            + fld("phone", "Phone number", "tel", "tel", half=True)
+            + fld("zipcode", "Zip code", auto="postal-code", half=True)
+            + f'<label class="fl"><span>Briefly, how can we help?</span><textarea id="{fid}-message" name="message" rows="{2 if short else 4}" required></textarea></label>'
+            + '<label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>'
+            + '<input type="hidden" name="page_url"><input type="hidden" name="page_title"><input type="hidden" name="t_ms">'
+            + f'<button class="btn pri lg" type="submit">{"Get my free estimate" if short else "Send request"}</button>'
+            + f'<p class="fine">Goes straight to CJ\'s Roofing. We\'ll call or text you back. See our <a href="/privacy-policy/">privacy policy</a>.</p>'
+            + "</form>"
+            + f'<script>(function(){{var t=Date.now(),f=document.getElementById("{fid}");f.addEventListener("submit",function(){{'
+              'f.page_url.value=location.href;f.page_title.value=document.title;f.t_ms.value=Date.now()-t;});})();</script>')
 
 
 SHORTCODES = {"cta": cta_box, "services": services_cards, "cities": cities_list, "gallery": gallery,
@@ -495,7 +510,8 @@ CSLB Lic. #{S["license"]} ({E(S["license_class"])}) · <a href="{S["license_url"
 # ---------------------------------------------------------------- home (site 1 section order)
 def render_home(pg):
     hero = pg["hero"]
-    card_body = contact_form() if CONTACT_FORM else (
+    card_body = (contact_form(short=True)
+                 + f'<p class="or">Or call / text Chris: <a href="{TEL}">{E(S["phone_display"])}</a></p>') if CONTACT_FORM else (
         f'<p>Call or text {E(S["phone_display"])}. You\'ll reach the owner, not a call center. '
         f'Texting? Add a couple of photos of the problem area and your address.</p>'
         f'<ul class="ticks"><li>{IC["check"]}In business since July 1995</li>'
