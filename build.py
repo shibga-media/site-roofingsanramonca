@@ -7,6 +7,11 @@ Builds roofingsanramonca.com into docs/ (GitHub Pages serves main:/docs).
 
 Words: content.py        Styles: src/site.css        Photos: src/photos/<slug>.jpg (+ a line in content.PHOTOS)
 Needs: Python 3 + Pillow (pip install pillow). Nothing else.
+
+Design: Shibga Media's default template, "site 1" (https://site1.roofingsitetemplate1.com/), adapted to
+CJ's Roofing — utility bar + sticky header, split hero with a contact card, service strip, why-us icon
+boxes, split about block, work photos, review band, service cards, areas, CTA band, footer, and the
+floating Call/Text/Email/Reviews bar. Heading font: Teko (SIL OFL, self-hosted in src/fonts/).
 """
 import datetime, hashlib, html, json, os, re, shutil
 from PIL import Image
@@ -24,7 +29,7 @@ INDEXABLE = False
 # To add one later: set CONTACT_FORM to a dict like
 #   {"action": "https://<form handler URL>", "subject": "Shibga Media Leads"}
 # The handler must email customerservice@cjs-roofing.com with that subject and
-# redirect to /thank-you/. The form then appears on /contact-us/ (see contact_form()).
+# redirect to /thank-you/. The form then appears in the home hero card and on /contact-us/.
 CONTACT_FORM = None
 # ---------------------------------------------------------------------------
 
@@ -38,40 +43,52 @@ YEAR = datetime.date.today().year
 E = html.escape
 
 # ---------------------------------------------------------------- icons (inline SVG)
+_O = 'viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
 IC = {
     "phone": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>',
     "text": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 1-2zm3 6v2h2V9zm4 0v2h2V9zm4 0v2h2V9z"/></svg>',
     "mail": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.5 7v1.9l7.5 5.1 7.5-5.1V7z"/></svg>',
-    "logo": '<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="8" fill="#a4402a"/><path d="M6 22 20 10l14 12" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 27.5 20 20l9 7.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/></svg>',
-    "shingle": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><path d="M4 24 24 7l20 17"/><path d="M11 22h26M9 28h30M8 34h32"/><path d="M17 22v6M31 22v6M13 28v6M24 28v6M35 28v6"/></svg>',
-    "tile": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 24 24 7l20 17"/><path d="M8 30c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/><path d="M8 38c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/></svg>',
-    "gutters": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h40"/><path d="M6 18h36v5a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M34 26v14"/><path d="M34 40h6"/><path d="M20 32c0 2-1.5 3.5-3 3.5S14 34 14 32s3-6 3-6 3 4 3 6z"/></svg>',
+    "pin": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5z"/></svg>',
+    "star": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z"/></svg>',
+    "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>',
+    "burger": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+    "logo": '<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="4" fill="#a8391f"/><path d="M6 22 20 10l14 12" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 27.5 20 20l9 7.5" fill="none" stroke="#f0b541" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    "shingle": f'<svg {_O}><path d="M4 24 24 7l20 17"/><path d="M11 22h26M9 28h30M8 34h32"/><path d="M17 22v6M31 22v6M13 28v6M24 28v6M35 28v6"/></svg>',
+    "tile": f'<svg {_O}><path d="M4 24 24 7l20 17"/><path d="M8 30c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/><path d="M8 38c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/></svg>',
+    "gutters": f'<svg {_O}><path d="M4 14h40"/><path d="M6 18h36v5a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M34 26v14"/><path d="M34 40h6"/><path d="M20 32c0 2-1.5 3.5-3 3.5S14 34 14 32s3-6 3-6 3 4 3 6z"/></svg>',
+    "owner": f'<svg {_O}><circle cx="24" cy="15" r="7"/><path d="M10 41c1.5-8 7-12 14-12s12.5 4 14 12"/></svg>',
+    "focus": f'<svg {_O}><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="1.5" fill="currentColor"/></svg>',
+    "badge": f'<svg {_O}><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="M16.5 24l5 5 10-11"/></svg>',
+    "local": f'<svg {_O}><path d="M24 44s14-13 14-24a14 14 0 0 0-28 0c0 11 14 24 14 24z"/><circle cx="24" cy="20" r="5"/></svg>',
 }
 
 TEL = f'tel:{S["phone_tel"]}'
 SMS = f'sms:{S["phone_tel"]}'
 MAILTO = f'mailto:{S["email"]}'
 
-SERVICES = [  # home + services hub cards
+SERVICES = [  # home + services hub cards: icon, url, name, blurb, sub-pages, card photo (None = icon panel)
     ("tile", "/services/tile-roofing/", "Tile Roofing",
      "Concrete and clay tile: broken and slipped tiles, leaks, underlayment problems, re-roofs.",
      [("/services/tile-roofing/tile-roof-repair/", "Tile roof repair"),
-      ("/services/tile-roofing/tile-roof-replacement/", "Tile roof replacement")]),
+      ("/services/tile-roofing/tile-roof-replacement/", "Tile roof replacement")], "tile-roof-dublin-closeup"),
     ("shingle", "/services/shingle-roofing/", "Shingle Roofing",
      "Asphalt shingle roofs: leaks, missing and worn shingles, flashing, full replacement.",
      [("/services/shingle-roofing/shingle-roof-repair/", "Shingle roof repair"),
-      ("/services/shingle-roofing/shingle-roof-replacement/", "Shingle roof replacement")]),
+      ("/services/shingle-roofing/shingle-roof-replacement/", "Shingle roof replacement")], "shingle-roof-newark-vents"),
     ("gutters", "/services/gutters/", "Gutters",
      "New gutters and downspouts, and repairs to leaking, sagging or loose gutters.",
      [("/services/gutters/seamless-gutter-installation/", "Seamless gutter installation"),
-      ("/services/gutters/gutter-repair/", "Gutter repair")]),
+      ("/services/gutters/gutter-repair/", "Gutter repair")], None),
 ]
 CITY_PAGES = [("/dublin/", "Dublin"), ("/danville/", "Danville"), ("/pleasanton/", "Pleasanton"),
               ("/alamo/", "Alamo"), ("/castro-valley/", "Castro Valley"), ("/fremont/", "Fremont")]
 
-NAV = [("/services/", "Services"), ("/services/tile-roofing/", "Tile"), ("/services/shingle-roofing/", "Shingle"),
-       ("/services/gutters/", "Gutters"), ("/gallery/", "Gallery"), ("/reviews/", "Reviews"),
-       ("/about-us/", "About"), ("/roofing-faq/", "FAQ"), ("/contact-us/", "Contact")]
+# Home "recent work" strip (site 1's gallery row) — CJ's own photos only.
+HOME_WORK = ["tile-roof-repair-dublin-replacement-tiles", "shingle-roof-newark-rooftops",
+             "concrete-tile-roof-solar-prep-3", "tile-roof-dublin-ridge"]
+WHY_ICONS = ["owner", "focus", "badge", "local"]
+CONTACT_PHOTO = "tile-roof-dublin-ridge-2"
+REVIEW_PHOTO = "tile-roof-dublin-ridge-2"
 
 PAGE_BY_PATH = {p["path"]: p for p in C.PAGES}
 
@@ -145,26 +162,56 @@ def slugify(t):
     return re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
 
 
+def two_tone(t):
+    """Site 1 headings: dark words + a brand-coloured phrase. 'A — B' colours B; else the last word(s)."""
+    if " — " in t:
+        a, b = t.split(" — ", 1)
+        return f'{E(a)} <span class="hl">{E(b)}</span>'
+    w = t.split()
+    n = 2 if len(w) >= 4 else 1
+    if len(w) < 2:
+        return E(t)
+    return f'{E(" ".join(w[:-n]))} <span class="hl">{E(" ".join(w[-n:]))}</span>'
+
+
+def call_btns(text_label="Text a photo", call_label=None):
+    call_label = call_label or f'Call {S["phone_display"]}'
+    return (f'<div class="btns"><a class="btn pri" href="{TEL}">{IC["phone"]}{call_label}</a>'
+            f'<a class="btn ghost" href="{SMS}">{IC["text"]}{text_label}</a></div>')
+
+
 def cta_box(title="Talk to Chris about your roof"):
-    return (f'<section class="cta"><h2>{E(title)}</h2>'
+    """Inline version (mid-page): site 1's highlighted CTA note."""
+    return (f'<div class="note"><h2>{E(title)}</h2>'
+            f'<p>Call or text {E(S["phone_display"])}. You\'ll reach the owner, not a call center.</p>{call_btns()}</div>')
+
+
+def cta_band(title="Talk to Chris about your roof"):
+    """Full-width version (end of page): site 1's red band with a white box."""
+    return (f'<section class="ctaband"><div class="wrap"><div class="ctabox"><h2>{E(title)}</h2>'
             f'<p>Call or text {E(S["phone_display"])}. You\'ll reach the owner, not a call center.</p>'
-            f'<div class="btns"><a class="btn pri" href="{TEL}">{IC["phone"]}Call {S["phone_display"]}</a>'
-            f'<a class="btn sec" href="{SMS}">{IC["text"]}Text a photo</a></div></section>')
+            f'{call_btns()}</div></div></section>')
 
 
 def services_cards():
     out = ['<div class="svc">']
-    for icon, url, name, blurb, subs in SERVICES:
-        out.append(f'<a class="card" href="{url}">{IC[icon]}<h3>{E(name)}</h3><p>{E(blurb)}</p>'
-                   f'<span class="more">{E(name)} &rarr;</span></a>')
+    for icon, url, name, blurb, subs, photo in SERVICES:
+        top = (f'<a class="svc-img" href="{url}" tabindex="-1" aria-hidden="true">'
+               f'{img_tag(photo, "(min-width:960px) 360px, (min-width:600px) 33vw, 100vw")}</a>' if photo else
+               f'<a class="svc-img icon" href="{url}" tabindex="-1" aria-hidden="true">{IC[icon]}</a>')
+        links = "".join(f'<li><a href="{u}">{E(n)}</a></li>' for u, n in subs)
+        out.append(f'<article class="svc-card">{top}<div class="svc-body"><h3><a href="{url}">{E(name)}</a></h3>'
+                   f'<p>{E(blurb)}</p><ul class="sq">{links}</ul>'
+                   f'<a class="btn pri sm" href="{url}">{E(name)} &rsaquo;</a></div></article>')
     out.append("</div>")
     return "".join(out)
 
 
 def cities_list():
-    items = ['<li><a href="/">San Ramon<span>Home base</span></a></li>']
-    items += [f'<li><a href="{u}">{E(n)}<span>Roofing in {E(n)}</span></a></li>' for u, n in CITY_PAGES]
-    return f'<ul class="cities" id="areas">{"".join(items)}</ul><p>We also work across the greater Bay Area. Not sure if you\'re in range? Call {inline("{call}")}.</p>'
+    items = [f'<li><a href="/">{IC["pin"]}<b>San Ramon</b><span>Home base</span></a></li>']
+    items += [f'<li><a href="{u}">{IC["pin"]}<b>{E(n)}</b><span>Roofing in {E(n)}</span></a></li>' for u, n in CITY_PAGES]
+    return (f'<ul class="cities" id="areas">{"".join(items)}</ul>'
+            f'<p>We also work across the greater Bay Area. Not sure if you\'re in range? Call {inline("{call}")}.</p>')
 
 
 def gallery():
@@ -180,13 +227,13 @@ def gallery():
 
 
 def faq_html():
-    return '<div class="faq">' + "".join(f"<h3>{E(q)}</h3><p>{inline(a)}</p>" for q, a in C.FAQ) + "</div>"
+    return '<div class="faq">' + "".join(f'<div class="qa"><h3>{E(q)}</h3><p>{inline(a)}</p></div>' for q, a in C.FAQ) + "</div>"
 
 
 def review_links():
-    return (f'<div class="contact"><a class="card" href="{S["google_maps"]}" rel="noopener"><div><b>Google</b>'
+    return (f'<div class="contact"><a class="card" href="{S["google_maps"]}" rel="noopener">{IC["star"]}<div><b>Google</b>'
             f'<span>CJ\'s Roofing on Google Maps</span></div></a>'
-            f'<a class="card" href="{S["yelp"]}" rel="noopener"><div><b>Yelp</b><span>CJ\'s Roofing on Yelp</span></div></a></div>')
+            f'<a class="card" href="{S["yelp"]}" rel="noopener">{IC["star"]}<div><b>Yelp</b><span>CJ\'s Roofing on Yelp</span></div></a></div>')
 
 
 def review_cta():
@@ -207,7 +254,7 @@ def contact_form():
     if not CONTACT_FORM:
         return ""   # <- form goes here once a working handler exists (see CONTACT_FORM at the top)
     f = CONTACT_FORM
-    return (f'<form class="card" method="post" action="{E(f["action"])}"><h2>Send a message</h2>'
+    return (f'<form class="card form" method="post" action="{E(f["action"])}"><h2>Send a message</h2>'
             f'<input type="hidden" name="_subject" value="{E(f["subject"])}">'
             f'<input type="hidden" name="_next" value="{DOMAIN}/thank-you/">'
             '<p><label>Name<br><input name="name" required autocomplete="name"></label></p>'
@@ -242,10 +289,34 @@ def render_body(text):
             t = b[3:]
             out.append(f'<h2 id="{slugify(t)}">{inline(t)}</h2>')
         elif all(l.strip().startswith("- ") for l in b.splitlines()):
-            out.append("<ul>" + "".join(f"<li>{inline(l.strip()[2:])}</li>" for l in b.splitlines()) + "</ul>")
+            out.append('<ul class="sq">' + "".join(f"<li>{inline(l.strip()[2:])}</li>" for l in b.splitlines()) + "</ul>")
         else:
             out.append(f"<p>{inline(' '.join(l.strip() for l in b.splitlines()))}</p>")
     return "\n".join(out)
+
+
+def split_trailing_cta(text):
+    """A page body ending in [[cta]] gets site 1's full-width CTA band instead of an inline box."""
+    t = text.strip()
+    if t.endswith("[[cta]]"):
+        return t[: -len("[[cta]]")].rstrip(), True
+    return t, False
+
+
+def home_sections(text):
+    """Home body -> [(heading or None, raw block text)] split on '## ' headings."""
+    secs, cur_h, cur = [], None, []
+    for block in re.split(r"\n\s*\n", text.strip()):
+        b = block.strip()
+        if b.startswith("## "):
+            if cur_h or cur:
+                secs.append((cur_h, "\n\n".join(cur)))
+            cur_h, cur = b[3:], []
+        elif b:
+            cur.append(b)
+    if cur_h or cur:
+        secs.append((cur_h, "\n\n".join(cur)))
+    return secs
 
 
 # ---------------------------------------------------------------- schema
@@ -294,17 +365,28 @@ def ld_scripts(pg):
 
 
 # ---------------------------------------------------------------- page chrome
-def head(pg, css_href):
+def lcp_photo(pg):
+    if pg.get("layout") == "contact":
+        return None
+    return pg.get("hero")
+
+
+def hero_sizes(pg):
+    return "(min-width:960px) 50vw, 100vw" if pg.get("layout") == "home" else "(min-width:960px) 45vw, 100vw"
+
+
+def head(pg, css_href, font_href):
     robots = "noindex, nofollow" if (not INDEXABLE or pg.get("noindex")) else "index, follow"
     canon = DOMAIN + pg["path"]
     og_img = pg.get("hero") or "tile-roof-dublin-hills"
     og_url = DOMAIN + PHOTO_META[og_img]["sizes"][-1][1]
-    preload = ""
-    if pg.get("hero"):
-        m = PHOTO_META[pg["hero"]]
-        preload = (f'<link rel="preload" as="image" href="{m["sizes"][0][1]}" '
-                   f'imagesrcset="{", ".join(f"{u} {w}w" for w, u in m["sizes"])}" '
-                   f'imagesizes="{hero_sizes(pg)}" fetchpriority="high">')
+    preload = f'<link rel="preload" href="{font_href}" as="font" type="font/woff2" crossorigin>\n'
+    lp = lcp_photo(pg)
+    if lp:
+        m = PHOTO_META[lp]
+        preload += (f'<link rel="preload" as="image" href="{m["sizes"][0][1]}" '
+                    f'imagesrcset="{", ".join(f"{u} {w}w" for w, u in m["sizes"])}" '
+                    f'imagesizes="{hero_sizes(pg)}" fetchpriority="high">\n')
     return f"""<!doctype html>
 <html lang="en-US">
 <head>
@@ -317,92 +399,211 @@ def head(pg, css_href):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{E(S["name"])}">
 <meta property="og:title" content="{E(pg["title"])}"><meta property="og:description" content="{E(pg["description"])}">
 <meta property="og:url" content="{canon}"><meta property="og:image" content="{og_url}">
-<meta name="theme-color" content="#1f2a35">
+<meta name="theme-color" content="#a8391f">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {preload}<link rel="stylesheet" href="{css_href}">
 {ld_scripts(pg)}
 </head>"""
 
 
-def hero_sizes(pg):
-    return "(min-width:960px) 540px, 100vw" if pg.get("layout") == "home" else "(min-width:1140px) 1108px, 100vw"
+def logo_html():
+    return (f'<a class="logo" href="/" aria-label="CJ\'s Roofing home">{IC["logo"]}'
+            f'<span><b>CJ\'S ROOFING</b><small>San Ramon · Since 1995</small></span></a>')
 
 
 def header(pg):
     cur = pg["path"]
-    desk = "".join(f'<a href="{u}"' + (' aria-current="page"' if u == cur else "") + f">{n}</a>" for u, n in NAV)
-    mob = [f'<a href="/">Home</a>']
-    for u, n in NAV:
-        mob.append(f'<a href="{u}">{n}{" roofing" if n in ("Tile", "Shingle") else ""}</a>')
-    mob += [f'<a class="sub" href="{u}">Roofing in {n}</a>' for u, n in CITY_PAGES]
-    mob.append('<a href="/types-of-roofing/">Shingle vs tile</a><a href="/privacy-policy/">Privacy Policy</a>')
+    ac = lambda u: ' aria-current="page"' if u == cur else ""
+    svc_sub = "".join(f'<a href="{u}"{ac(u)}>{E(n)}</a>' + "".join(f'<a class="sub" href="{su}"{ac(su)}>{E(sn)}</a>' for su, sn in subs)
+                      for _, u, n, _, subs, _ in SERVICES)
+    svc_sub = f'<a href="/services/"{ac("/services/")}>All services</a>' + svc_sub + f'<a href="/types-of-roofing/"{ac("/types-of-roofing/")}>Shingle vs tile</a>'
+    area_sub = f'<a href="/">San Ramon</a>' + "".join(f'<a href="{u}"{ac(u)}>{E(n)}</a>' for u, n in CITY_PAGES)
+    in_svc = cur.startswith("/services/") or cur == "/types-of-roofing/"
+    in_area = cur in dict(CITY_PAGES)
+    desk = (f'<a href="/"{ac("/")}>Home</a><a href="/about-us/"{ac("/about-us/")}>About</a>'
+            f'<div class="dd"><a href="/services/"{" class=on" if in_svc else ""}>Services</a><div class="ddm">{svc_sub}</div></div>'
+            f'<div class="dd"><a href="/#areas"{" class=on" if in_area else ""}>Areas</a><div class="ddm">{area_sub}</div></div>'
+            f'<a href="/gallery/"{ac("/gallery/")}>Gallery</a><a href="/reviews/"{ac("/reviews/")}>Reviews</a>'
+            f'<a href="/roofing-faq/"{ac("/roofing-faq/")}>FAQ</a><a href="/contact-us/"{ac("/contact-us/")}>Contact</a>')
+    mob = ['<a href="/">Home</a>', '<a href="/about-us/">About</a>', '<a href="/services/">Services</a>']
+    for _, u, n, _, subs, _ in SERVICES:
+        mob.append(f'<a class="sub" href="{u}">{E(n)}</a>')
+    mob += ['<a href="/gallery/">Gallery</a>', '<a href="/reviews/">Reviews</a>', '<a href="/roofing-faq/">FAQ</a>',
+            '<a href="/contact-us/">Contact</a>', '<span class="mh">Areas we serve</span>']
+    mob += [f'<a class="sub" href="{u}">Roofing in {E(n)}</a>' for u, n in CITY_PAGES]
+    mob.append('<a class="sub" href="/types-of-roofing/">Shingle vs tile</a><a class="sub" href="/privacy-policy/">Privacy Policy</a>')
+    mob.append(f'<a class="btn pri" href="{TEL}">{IC["phone"]}Call {S["phone_display"]}</a>')
     return f"""<body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="top"><div class="wrap"><span>San Ramon, CA · Since 1995<span class="hide-s"> · CSLB Lic. #{S["license"]}</span></span><a href="{TEL}">Call or text {S["phone_display"]}</a></div></div>
+<div class="topbar"><div class="wrap"><span>{IC["pin"]}{E(S["street"])}, {E(S["city"])}, {S["region"]}</span><span>CSLB Lic. #{S["license"]} · Since July 1995</span><a href="{TEL}">{IC["phone"]}Call or text {S["phone_display"]}</a></div></div>
 <header class="site"><div class="wrap">
-<a class="logo" href="/" aria-label="CJ's Roofing home">{IC["logo"]}<span><b>CJ'S ROOFING</b><small>San Ramon · Since 1995</small></span></a>
+<a class="m-call" href="{TEL}" aria-label="Call CJ's Roofing {S["phone_display"]}">{IC["phone"]}<span>Call</span></a>
+{logo_html()}
 <nav class="desk" aria-label="Main">{desk}</nav>
-<a class="hdr-call" href="{TEL}" aria-label="Call CJ's Roofing {S["phone_display"]}">{IC["phone"]}<span class="num">{S["phone_display"]}</span></a>
-<details class="menu"><summary>Menu</summary><nav aria-label="Mobile">{"".join(mob)}</nav></details>
+<a class="btn pri hdr-cta" href="{TEL}">{IC["phone"]}{S["phone_display"]}</a>
+<details class="menu"><summary>{IC["burger"]}<span>Menu</span></summary><nav aria-label="Mobile">{"".join(mob)}</nav></details>
 </div></header>"""
 
 
 def aside(pg):
-    svc = "".join(f'<li><a href="{u}">{E(n)}</a></li>' for _, u, n, _, _ in SERVICES)
-    cities = '<li><a href="/">San Ramon</a></li>' + "".join(f'<li><a href="{u}">{E(n)}</a></li>' for u, n in CITY_PAGES)
+    cur = pg["path"]
+    svc = ""
+    for _, u, n, _, subs, _ in SERVICES:
+        svc += f'<li><a href="{u}"' + (' aria-current="page"' if u == cur else "") + f">{E(n)}</a></li>"
+        svc += "".join(f'<li class="sub"><a href="{su}"' + (' aria-current="page"' if su == cur else "") + f">{E(sn)}</a></li>" for su, sn in subs)
+    cities = '<li><a href="/">San Ramon</a></li>' + "".join(
+        f'<li><a href="{u}"' + (' aria-current="page"' if u == cur else "") + f">{E(n)}</a></li>" for u, n in CITY_PAGES)
     return f"""<aside>
-<div class="card"><h2>Call Chris</h2><address class="nap"><strong>{E(S["name"])}</strong><br>{E(S["street"])}<br>{E(S["city"])}, {S["region"]} {S["zip"]}<br>
+<div class="card callcard"><h2>Call Chris</h2><address class="nap"><strong>{E(S["name"])}</strong><br>{E(S["street"])}<br>{E(S["city"])}, {S["region"]} {S["zip"]}<br>
 <a class="ph" href="{TEL}">{S["phone_display"]}</a>CSLB Lic. #{S["license"]}</address>
-<div class="btns"><a class="btn pri" href="{TEL}">{IC["phone"]}Call</a><a class="btn sec" href="{SMS}">{IC["text"]}Text</a></div></div>
-<div class="card"><h2>Services</h2><ul class="links">{svc}</ul></div>
-<div class="card"><h2>Areas we serve</h2><ul class="links">{cities}</ul></div>
+<div class="btns"><a class="btn pri" href="{TEL}">{IC["phone"]}Call</a><a class="btn ghost" href="{SMS}">{IC["text"]}Text</a></div></div>
+<div class="card side"><h2>Services</h2><ul class="links">{svc}</ul></div>
+<div class="card side"><h2>Areas we serve</h2><ul class="links">{cities}</ul></div>
 </aside>"""
 
 
+def reviews_band():
+    return f"""<section class="revband"><svg class="divider" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,44 1000,6 1000,16 0,54" fill="#a8391f"/><polygon points="0,54 1000,16 1000,24 0,60" fill="#1b1f24"/><polygon points="0,60 1000,24 1000,60" fill="#f0b541"/></svg><div class="wrap"><div class="rev-in">
+<div class="rev-img">{img_tag(REVIEW_PHOTO, "(min-width:960px) 340px, 240px")}</div>
+<div class="rev-txt"><h2>What our customers <span class="hl">say</span></h2>
+<p>Most of CJ's Roofing's work comes from people recommended by past customers. Read what customers have written, with their names and dates, where they wrote it.</p>
+<div class="btns"><a class="btn dark" href="{S["google_maps"]}" rel="noopener">{IC["star"]}Reviews on Google</a><a class="btn dark" href="{S["yelp"]}" rel="noopener">{IC["star"]}Reviews on Yelp</a></div></div>
+</div></div></section>"""
+
+
 def footer():
-    svc = "".join(f'<li><a href="{u}">{E(n)}</a></li>' for _, _, _, _, subs in SERVICES for u, n in subs)
+    svc = "".join(f'<li><a href="{u}">{E(n)}</a></li>' for _, _, _, _, subs, _ in SERVICES for u, n in subs)
     cities = '<li><a href="/">San Ramon</a></li>' + "".join(f'<li><a href="{u}">{E(n)}</a></li>' for u, n in CITY_PAGES)
     co = "".join(f'<li><a href="{u}">{n}</a></li>' for u, n in [
         ("/about-us/", "About"), ("/gallery/", "Gallery"), ("/reviews/", "Reviews"), ("/types-of-roofing/", "Shingle vs tile"),
-        ("/roofing-faq/", "Roofing FAQ"), ("/contact-us/", "Contact"), ("/privacy-policy/", "Privacy Policy")])
-    return f"""<footer class="site"><div class="wrap"><div class="grid">
-<div><h2>{E(S["name"])}</h2><address class="nap">{E(S["name"])} · {E(S["street"])}, {E(S["city"])}, {S["region"]} {S["zip"]}<br>
-<a href="{TEL}">{S["phone_display"]}</a> · <a href="{MAILTO}">{S["email"]}</a><br>
-CSLB Lic. #{S["license"]} ({E(S["license_class"])}) · <a href="{S["license_url"]}" rel="noopener">verify</a></address></div>
-<div><h2>Services</h2><ul>{svc}</ul></div>
-<div><h2>Areas</h2><ul>{cities}</ul></div>
-<div><h2>Company</h2><ul>{co}</ul></div>
-</div><div class="legal">© {YEAR} {E(S["name"])} · Roofing contractor in San Ramon, CA since 1995</div></div></footer>
-<div class="callbar"><a class="c" href="{TEL}">{IC["phone"]}Call {S["phone_display"]}</a><a class="t" href="{SMS}">{IC["text"]}Text</a></div>
+        ("/roofing-faq/", "Roofing FAQ"), ("/contact-us/", "Contact")])
+    return f"""<footer class="site"><div class="stripes" aria-hidden="true"></div><div class="wrap"><div class="grid">
+<div class="fbrand">{logo_html()}<address class="nap">{E(S["street"])}<br>{E(S["city"])}, {S["region"]} {S["zip"]}<br>
+<a href="{TEL}">{S["phone_display"]}</a><br><a href="{MAILTO}">{S["email"]}</a><br>
+CSLB Lic. #{S["license"]} ({E(S["license_class"])}) · <a href="{S["license_url"]}" rel="noopener">verify</a></address>
+<a class="btn pri" href="{TEL}">{IC["phone"]}Call {S["phone_display"]}</a></div>
+<div><h2>Services</h2><ul class="sq">{svc}</ul></div>
+<div><h2>Areas</h2><ul class="sq">{cities}</ul></div>
+<div><h2>Company</h2><ul class="sq">{co}</ul></div>
+</div></div><div class="legal"><div class="wrap"><span>© {YEAR} {E(S["name"])} · Roofing contractor in San Ramon, CA since 1995</span><a href="/privacy-policy/">Privacy Policy</a></div></div></footer>
+<nav class="actbar" aria-label="Quick contact"><a href="{TEL}">{IC["phone"]}<span>Call</span></a><a href="{SMS}">{IC["text"]}<span>Text</span></a><a href="{MAILTO}">{IC["mail"]}<span>Email</span></a><a href="/reviews/">{IC["star"]}<span>Reviews</span></a></nav>
 </body>
 </html>
 """
 
 
-def render_page(pg, css_href):
-    body = render_body(pg.get("body", ""))
-    lead = inline(pg["lead"]) if pg.get("lead") else ""
-    if pg.get("layout") == "home":
-        hero = pg["hero"]
-        main = f"""<main id="main">
-<section class="hero"><div class="wrap"><div class="txt">
-<h1>{E(pg["h1"])}</h1><p class="lead">{lead}</p>
-<div class="btns"><a class="btn pri" href="{TEL}">{IC["phone"]}Call {S["phone_display"]}</a><a class="btn sec" href="{SMS}">{IC["text"]}Text a photo</a></div>
-</div><div class="img">{img_tag(hero, hero_sizes(pg), eager=True)}</div></div></section>
-<div class="trust"><div class="wrap"><ul><li>In business since July 1995</li><li>CSLB Lic. #{S["license"]}, C-39</li><li>Owner answers the phone</li><li>Shingle, tile &amp; gutters</li></ul></div></div>
-<div class="wrap"><div class="cols"><div class="body">{body}</div>{aside(pg)}</div></div>
-</main>"""
+# ---------------------------------------------------------------- home (site 1 section order)
+def render_home(pg):
+    hero = pg["hero"]
+    card_body = contact_form() if CONTACT_FORM else (
+        f'<p>Call or text {E(S["phone_display"])}. You\'ll reach the owner, not a call center. '
+        f'Texting? Add a couple of photos of the problem area and your address.</p>'
+        f'<ul class="ticks"><li>{IC["check"]}In business since July 1995</li>'
+        f'<li>{IC["check"]}CSLB Lic. #{S["license"]}, C-39 Roofing</li>'
+        f'<li>{IC["check"]}Shingle roofs, tile roofs &amp; gutters</li></ul>{call_btns(call_label="Call Chris")}')
+    strip = "".join(f'<a href="{u}">{IC[i]}<span>{E(n)}</span></a>' for i, u, n, _, _, _ in SERVICES)
+    out = [f"""<main id="main">
+<section class="hero"><div class="hero-media slash"><div class="hm">{img_tag(hero, hero_sizes(pg), eager=True)}</div></div>
+<div class="wrap hero-grid"><div class="hero-txt">
+<p class="eyebrow">Owner-run roofing · San Ramon, CA</p>
+<h1>{two_tone(pg["h1"])}</h1>
+<p class="lead">{inline(pg["lead"])}</p>
+<a class="hero-phone" href="{TEL}">{IC["phone"]}{S["phone_display"]}</a>
+<div class="btns"><a class="btn pri lg" href="{TEL}">Call Chris today</a></div>
+</div>
+<div class="hero-card"><h2>Talk to Chris about your roof</h2><span class="bar" aria-hidden="true"></span>{card_body}</div>
+</div></section>
+<div class="wrap"><nav class="strip" aria-label="Services">{strip}</nav></div>"""]
+
+    body, trailing_cta = split_trailing_cta(pg["body"])
+    for h, raw in home_sections(body):
+        key = slugify(h or "")
+        if "[[services]]" in raw:
+            rest = render_body(raw.replace("[[services]]", "").strip()) if raw.replace("[[services]]", "").strip() else ""
+            svc_block = f"""<section class="band" id="{key}"><div class="wrap">
+<h2 class="sec">{two_tone(h)}</h2>{services_cards()}{rest}</div></section>"""
+            out.append(("svc", svc_block))
+        elif "[[cities]]" in raw:
+            out.append(("areas", f"""<section class="band areas" id="{key}"><div class="wrap">
+<h2 class="sec">{two_tone(h)}</h2>{render_body(raw)}</div></section>"""))
+        elif raw and all(l.strip().startswith("- **") for l in raw.splitlines()):
+            boxes = []
+            for i, l in enumerate(raw.splitlines()):
+                m = re.match(r"-\s*\*\*(.+?)\*\*\s*(.*)", l.strip())
+                title, txt = m.group(1).rstrip("."), m.group(2)
+                boxes.append(f'<div class="ibox">{IC[WHY_ICONS[i % len(WHY_ICONS)]]}<h3>{E(title)}</h3><p>{inline(txt)}</p></div>')
+            out.append(("why", f"""<section class="band grey why" id="{key}"><div class="wrap why-grid">
+<div class="why-l"><h2 class="sec">{two_tone(h)}</h2><div class="why-img">{img_tag("tile-roof-dublin-ridge", "(min-width:960px) 440px, 100vw")}</div></div>
+<div class="iboxes">{"".join(boxes)}</div></div></section>"""))
+        else:
+            m = re.search(r"\[\[photos?:([^\]]+)\]\]", raw)
+            photos = [s.strip() for s in m.group(1).split(",")] if m else []
+            text = re.sub(r"\[\[photos?:[^\]]+\]\]", "", raw).strip()
+            side = img_tag(photos[0], "(min-width:960px) 460px, 100vw") if photos else ""
+            more = ('<div class="photos two">' + "".join(figure(s, "(min-width:960px) 280px, 50vw") for s in photos[1:]) + "</div>") if len(photos) > 1 else ""
+            out.append(("about", f"""<section class="band about" id="{key}"><div class="wrap about-grid">
+<div class="about-img">{side}</div>
+<div class="about-txt"><h2 class="sec">{two_tone(h)}</h2><div class="dropcap">{render_body(text)}</div>{more}</div>
+</div></section>"""))
+
+    # site 1 order: why-us, about, work photos, reviews, service cards, (areas), CTA
+    order = {"why": 0, "about": 1, "svc": 3, "areas": 4}
+    secs = list(out[1:])
+    work = f"""<section class="band grey work"><div class="wrap">
+<h2 class="sec center">Recent roofing <span class="hl">work</span></h2>
+<div class="gal four">{"".join(figure(s, "(min-width:960px) 270px, 50vw") for s in HOME_WORK)}</div>
+<p class="center"><a class="btn pri" href="/gallery/">See all project photos</a></p></div></section>"""
+    secs.append(("work", work))
+    order["work"] = 2
+    secs.sort(key=lambda kv: order.get(kv[0], 9))
+    html_secs = []
+    for kind, block in secs:
+        html_secs.append(block)
+        if kind == "work":
+            html_secs.append(reviews_band())
+    return out[0] + "\n" + "\n".join(html_secs) + ("\n" + cta_band() if trailing_cta else "") + "\n</main>"
+
+
+# ---------------------------------------------------------------- inner pages
+def page_hero(pg):
+    trail = crumbs_for(pg["path"])
+    crumbs = " / ".join(f'<a href="{u}">{E(n)}</a>' for u, n in trail[:-1]) + f" / <span>{E(trail[-1][1])}</span>"
+    lead = f'<p class="lead">{inline(pg["lead"])}</p>' if pg.get("lead") else ""
+    if pg.get("hero"):
+        media = f'<div class="phero-media slash"><div class="hm">{img_tag(pg["hero"], hero_sizes(pg), eager=True)}</div></div>'
     else:
-        trail = crumbs_for(pg["path"])
-        crumbs = " › ".join(f'<a href="{u}">{E(n)}</a>' for u, n in trail[:-1]) + f" › <span>{E(trail[-1][1])}</span>"
-        heroimg = f'<div class="heroimg">{img_tag(pg["hero"], hero_sizes(pg), eager=True)}</div>' if pg.get("hero") else ""
-        main = f"""<main id="main"><div class="wrap">
+        icon = IC.get(pg.get("service") or "", IC["tile"])
+        media = f'<div class="phero-media slash" aria-hidden="true"><div class="hm icon">{icon}</div></div>'
+    return f"""<section class="phero">{media}<div class="wrap"><div class="phero-txt">
 <nav class="crumbs" aria-label="Breadcrumb">{crumbs}</nav>
-<div class="pagehead"><h1>{E(pg["h1"])}</h1>{f'<p class="lead">{lead}</p>' if lead else ''}</div>
-{heroimg}
-<div class="cols"><div class="body">{body}</div>{aside(pg)}</div>
-</div></main>"""
-    return head(pg, css_href) + "\n" + header(pg) + "\n" + main + "\n" + footer()
+<h1>{two_tone(pg["h1"])}</h1>{lead}{call_btns()}
+</div></div></section>"""
+
+
+def render_contact(pg):
+    trail = crumbs_for(pg["path"])
+    crumbs = " / ".join(f'<a href="{u}">{E(n)}</a>' for u, n in trail[:-1]) + f" / <span>{E(trail[-1][1])}</span>"
+    return f"""<main id="main"><section class="csplit"><div class="csplit-txt">
+<nav class="crumbs" aria-label="Breadcrumb">{crumbs}</nav>
+<h1>{two_tone(pg["h1"])}</h1><p class="lead">{inline(pg["lead"])}</p>
+{render_body(pg["body"])}
+</div><div class="csplit-img">{img_tag(CONTACT_PHOTO, "(min-width:960px) 48vw, 100vw")}</div></section></main>"""
+
+
+def render_page(pg, css_href, font_href):
+    if pg.get("layout") == "home":
+        main = render_home(pg)
+    elif pg.get("layout") == "contact":
+        main = render_contact(pg)
+    else:
+        body, trailing = split_trailing_cta(pg.get("body", ""))
+        wide = "[[gallery]]" in body
+        inner = f'<div class="body{" wide" if wide else ""}">{render_body(body)}</div>'
+        cols = f'<div class="cols{" one" if wide else ""}">{inner}{"" if wide else aside(pg)}</div>'
+        rev = reviews_band() if (pg.get("service") or pg.get("city")) else ""
+        main = (f'<main id="main">{page_hero(pg)}\n<div class="wrap">{cols}</div>\n{rev}'
+                + (cta_band() if trailing else "") + "</main>")
+    return head(pg, css_href, font_href) + "\n" + header(pg) + "\n" + main + "\n" + footer()
 
 
 # ---------------------------------------------------------------- write site
@@ -425,20 +626,25 @@ def write(rel, text):
 def main():
     clean_out()
     build_photos()
-    css = open(os.path.join(ROOT, "src", "site.css"), encoding="utf-8").read()
+    font_src = os.path.join(ROOT, "src", "fonts", "teko-latin.woff2")
+    fver = hashlib.md5(open(font_src, "rb").read()).hexdigest()[:8]
+    os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
+    shutil.copyfile(font_src, os.path.join(OUT, "assets", "teko-latin.woff2"))
+    font_href = f"/assets/teko-latin.woff2?v={fver}"
+    css = open(os.path.join(ROOT, "src", "site.css"), encoding="utf-8").read().replace("{FONT}", font_href)
     ver = hashlib.md5(css.encode()).hexdigest()[:8]
     write("/assets/site.css", css)
     css_href = f"/assets/site.css?v={ver}"
     write("/favicon.svg", IC["logo"].replace('aria-hidden="true"', 'xmlns="http://www.w3.org/2000/svg"'))
 
     for pg in C.PAGES:
-        write(pg["path"] + "index.html", render_page(pg, css_href))
+        write(pg["path"] + "index.html", render_page(pg, css_href, font_href))
 
     nf = {"path": "/404/", "label": "Not found", "noindex": True, "title": "Page not found | CJ's Roofing",
           "h1": "Page not found", "description": "This page doesn't exist.",
           "lead": "That page isn't here. Try the [home page](/) or call Chris at {call}.", "body": "[[services]]"}
     PAGE_BY_PATH["/404/"] = nf
-    write("/404.html", render_page(nf, css_href))
+    write("/404.html", render_page(nf, css_href, font_href))
 
     today = datetime.date.today().isoformat()
     urls = "".join(f"<url><loc>{DOMAIN}{p['path']}</loc><lastmod>{today}</lastmod></url>"
