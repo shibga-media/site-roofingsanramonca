@@ -63,7 +63,7 @@ IC = {
 }
 
 TEL = f'tel:{S["phone_tel"]}'
-SMS = f'sms:{S["phone_tel"]}'
+SMS = f'sms:{S.get("sms_tel", S["phone_tel"])}'
 MAILTO = f'mailto:{S["email"]}'
 
 SERVICES = [  # home + services hub cards: icon, url, name, blurb, sub-pages, card photo (None = icon panel)
@@ -323,7 +323,7 @@ def home_sections(text):
 def business_ld():
     return {
         "@context": "https://schema.org", "@type": "RoofingContractor", "@id": f"{DOMAIN}/#business",
-        "name": S["name"], "url": f"{DOMAIN}/", "telephone": "+1-925-548-0932", "email": S["email"],
+        "name": S["name"], "url": f"{DOMAIN}/", "telephone": "+1-925-205-6447", "email": S["email"],
         "foundingDate": S["founded"], "founder": {"@type": "Person", "name": S["owner"]},
         "image": f"{DOMAIN}{PHOTO_META['tile-roof-dublin-hills']['sizes'][-1][1]}",
         "address": {"@type": "PostalAddress", "streetAddress": S["street"], "addressLocality": S["city"],

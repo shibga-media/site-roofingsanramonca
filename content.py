@@ -25,8 +25,9 @@ SITE = {
     "name": "CJ's Roofing",
     "owner": "Chris J Montano",
     "founded": "1995-07-17",
-    "phone_display": "(925) 548-0932",
-    "phone_tel": "+19255480932",
+    "phone_display": "(925) 205-6447",
+    "phone_tel": "+19252056447",
+    "sms_tel": "+19255480932",       # texts go to Chris's mobile — the call-tracking number takes calls only
     "email": "customerservice@cjs-roofing.com",
     "street": "9672 Camassia Way",
     "city": "San Ramon",
@@ -122,7 +123,7 @@ FAQ = [
      "[Dublin](/dublin/), [Pleasanton](/pleasanton/), [Danville](/danville/), [Alamo](/alamo/), "
      "[Castro Valley](/castro-valley/) and [Fremont](/fremont/). Not sure if you're in range? Call and ask."),
     ("Who will I be dealing with?",
-     "Chris Montano, the owner. The number on this website, {call}, is his own phone."),
+     "Chris Montano, the owner. Calls to {call} ring straight through to his phone."),
     ("How do I get an estimate?",
      "Call or text Chris at {call}. If you text, add a couple of photos of the problem area and "
      "your address, and he'll get back to you."),
@@ -147,7 +148,7 @@ page(path="/", layout="home", label="Home",
      title="Roofing San Ramon, CA | Shingle & Tile Roofs | CJ's Roofing",
      h1="San Ramon Roofing Contractor — Shingle & Tile Roofs Since 1995",
      description="CJ's Roofing is a San Ramon roofing contractor since 1995: asphalt shingle and tile roof "
-                 "repair and replacement, plus gutters. Owner-run. Call Chris at (925) 548-0932.",
+                 "repair and replacement, plus gutters. Owner-run. Call Chris at (925) 205-6447.",
      hero="tile-roof-dublin-hills",
      lead="CJ's Roofing is Chris Montano's roofing company, based on Camassia Way in San Ramon. Since 1995 "
           "Chris has repaired and replaced asphalt shingle and tile roofs, and put up and fixed gutters, "
@@ -159,7 +160,7 @@ page(path="/", layout="home", label="Home",
 
 ## Why San Ramon homeowners call Chris
 
-- **You talk to the owner.** The number on this site is Chris's own phone. The person you talk to is the person answering for the work.
+- **You talk to the owner.** Calls to this number ring straight through to Chris. The person you talk to is the person answering for the work.
 - **We stick to what we know.** Shingle roofs, tile roofs and gutters. No metal roofs, no siding, no remodeling.
 - **Licensed since 1995.** California contractor licence #709867, C-39 Roofing. [Check it on the CSLB site](https://www.cslb.ca.gov/709867).
 - **Local.** San Ramon is home. Most of our service area is a short drive up or down I-680.
@@ -221,7 +222,7 @@ page(path="/services/", label="Services",
      title="Roofing & Gutter Services | CJ's Roofing",
      h1="Roofing and Gutter Services",
      description="Shingle roof repair and replacement, tile roof repair and replacement, and gutter "
-                 "installation and repair from CJ's Roofing, San Ramon, CA. Call (925) 548-0932.",
+                 "installation and repair from CJ's Roofing, San Ramon, CA. Call (925) 205-6447.",
      lead="CJ's Roofing does three things: asphalt shingle roofs, tile roofs and gutters. Pick the one you need below, "
           "or just call Chris and describe the problem.",
      body="""
@@ -242,7 +243,7 @@ page(path="/services/shingle-roofing/", label="Shingle Roofing", service="shingl
      title="Shingle Roofing San Ramon, CA | CJ's Roofing",
      h1="Asphalt Shingle Roofing in San Ramon",
      description="Asphalt shingle roof repair and replacement in San Ramon and the Tri-Valley. "
-                 "Owner-run since 1995, CSLB #709867. Call Chris at (925) 548-0932.",
+                 "Owner-run since 1995, CSLB #709867. Call Chris at (925) 205-6447.",
      hero="shingle-roof-newark-rooftops",
      lead="Asphalt shingles are the most common roof on Bay Area homes, and they're half of what CJ's Roofing "
           "does. We repair shingle roofs and replace them.",
@@ -280,7 +281,7 @@ page(path="/services/shingle-roofing/shingle-roof-replacement/", label="Shingle 
      title="Shingle Roof Replacement San Ramon | CJ's Roofing",
      h1="Shingle Roof Replacement",
      description="Full asphalt shingle roof replacement in San Ramon, Danville, Dublin and Pleasanton from "
-                 "CJ's Roofing, licensed since 1995 (CSLB #709867). Call (925) 548-0932.",
+                 "CJ's Roofing, licensed since 1995 (CSLB #709867). Call (925) 205-6447.",
      hero="shingle-roof-newark-ridge",
      lead="When a shingle roof is worn out across the board, repairs stop working. A replacement takes the roof "
           "back to the deck and starts again.",
@@ -323,7 +324,7 @@ page(path="/services/shingle-roofing/shingle-roof-repair/", label="Shingle Roof 
      title="Shingle Roof Repair San Ramon | CJ's Roofing",
      h1="Shingle Roof Repair",
      description="Shingle roof leak and repair work in San Ramon and the Tri-Valley: missing shingles, "
-                 "flashing, vent pipe boots. Owner-run since 1995. Call (925) 548-0932.",
+                 "flashing, vent pipe boots. Owner-run since 1995. Call (925) 205-6447.",
      hero="shingle-roof-newark-vents",
      lead="Most shingle roof leaks start small: one lifted shingle, one cracked pipe boot, one gap in the flashing. "
           "Caught early, they're repairs, not new roofs.",
@@ -357,7 +358,7 @@ page(path="/services/tile-roofing/", label="Tile Roofing", service="tile",
      title="Tile Roofing San Ramon, CA | Concrete & Clay | CJ's Roofing",
      h1="Tile Roofing in San Ramon — Concrete and Clay",
      description="Tile roof repair and replacement in San Ramon, Dublin, Danville and the Tri-Valley. "
-                 "Broken and slipped tiles, leaks, re-roofs. Since 1995. Call (925) 548-0932.",
+                 "Broken and slipped tiles, leaks, re-roofs. Since 1995. Call (925) 205-6447.",
      hero="tile-roof-dublin-closeup",
      lead="Tile is the other half of CJ's Roofing's work. Much of the housing built in San Ramon, Dublin and "
           "Danville from the late 1980s on has concrete tile roofs, and they need a roofer who knows how to "
@@ -399,7 +400,7 @@ page(path="/services/tile-roofing/tile-roof-replacement/", label="Tile Roof Repl
      title="Tile Roof Replacement San Ramon | CJ's Roofing",
      h1="Tile Roof Replacement",
      description="Tile roof replacement in San Ramon, Dublin, Danville and Pleasanton by CJ's Roofing, "
-                 "licensed since 1995 (CSLB #709867). Call Chris at (925) 548-0932.",
+                 "licensed since 1995 (CSLB #709867). Call Chris at (925) 205-6447.",
      hero="tile-roof-san-ramon-tiles-lifted",
      lead="A tile roof can last a long time, but not forever. When leaks keep coming back or the layer under the "
           "tiles has given out, it's time to deal with the whole roof.",
@@ -439,7 +440,7 @@ page(path="/services/tile-roofing/tile-roof-repair/", label="Tile Roof Repair", 
      title="Tile Roof Repair San Ramon | CJ's Roofing",
      h1="Tile Roof Repair",
      description="Tile roof repair in San Ramon, Dublin and the Tri-Valley: cracked and slipped tiles, "
-                 "ridge tiles, valley and flashing leaks. Since 1995. Call (925) 548-0932.",
+                 "ridge tiles, valley and flashing leaks. Since 1995. Call (925) 205-6447.",
      hero="tile-roof-repair-dublin-replacement-tiles",
      lead="Most tile roof problems are repairs: a few broken tiles, a slipped row, a loose ridge, a leaking valley. "
           "Fixed early, they stay small.",
@@ -478,7 +479,7 @@ page(path="/services/gutters/", label="Gutters", service="gutters",
      title="Gutter Installation San Ramon, CA | CJ's Roofing",
      h1="Seamless Gutters and Gutter Repair in San Ramon",
      description="Gutter installation and gutter repair in San Ramon and the Tri-Valley from CJ's Roofing. "
-                 "Owner-run roofing company since 1995. Call (925) 548-0932.",
+                 "Owner-run roofing company since 1995. Call (925) 205-6447.",
      lead="Gutters are the only work CJ's Roofing does besides roofs, and they belong together: a roof sheds the "
           "water, and gutters carry it away from the house.",
      body="""
@@ -504,7 +505,7 @@ page(path="/services/gutters/seamless-gutter-installation/", label="Seamless Gut
      title="Seamless Gutter Installation | CJ's Roofing",
      h1="Seamless Gutter Installation",
      description="New seamless gutters and downspouts for homes in San Ramon, Danville, Dublin and "
-                 "Pleasanton from CJ's Roofing, since 1995. Call Chris at (925) 548-0932.",
+                 "Pleasanton from CJ's Roofing, since 1995. Call Chris at (925) 205-6447.",
      lead="New gutters done properly: sized for the roof, pitched to drain, and fastened so they stay put.",
      body="""
 ## What “seamless” means
@@ -538,7 +539,7 @@ page(path="/services/gutters/gutter-repair/", label="Gutter Repair", service="gu
      title="Gutter Repair & Replacement | CJ's Roofing",
      h1="Gutter Repair and Replacement",
      description="Gutter repair in San Ramon and the Tri-Valley: leaking seams, sagging and loose gutters, "
-                 "downspouts. CJ's Roofing, since 1995. Call (925) 548-0932.",
+                 "downspouts. CJ's Roofing, since 1995. Call (925) 205-6447.",
      lead="Not every gutter problem needs new gutters. Many are a loose hanger, a failed seam or a disconnected "
           "downspout.",
      body="""
@@ -572,7 +573,7 @@ page(path="/fremont/", label="Fremont", city="Fremont",
      title="Roofing Fremont, CA | Shingle & Tile Roofer | CJ's Roofing",
      h1="Fremont Roofing Contractor",
      description="Shingle and tile roof repair and replacement, plus gutters, for Fremont homes in Niles, "
-                 "Centerville, Irvington, Mission San Jose and Warm Springs. Call (925) 548-0932.",
+                 "Centerville, Irvington, Mission San Jose and Warm Springs. Call (925) 205-6447.",
      hero="shingle-roof-newark-rooftops",
      lead="CJ's Roofing works in Fremont on asphalt shingle roofs, tile roofs and gutters. We're based in San Ramon, "
           "straight down I-680 over the Sunol Grade.",
@@ -610,7 +611,7 @@ page(path="/pleasanton/", label="Pleasanton", city="Pleasanton",
      title="Roofing Pleasanton, CA | Shingle & Tile Roofer | CJ's Roofing",
      h1="Pleasanton Roofing Contractor",
      description="Shingle and tile roof repair and replacement, plus gutters, for Pleasanton homes. "
-                 "San Ramon-based, owner-run since 1995. Call Chris at (925) 548-0932.",
+                 "San Ramon-based, owner-run since 1995. Call Chris at (925) 205-6447.",
      hero="tile-roof-dublin-hills",
      lead="CJ's Roofing repairs and replaces shingle and tile roofs and installs gutters in Pleasanton, just down "
           "I-680 from our base in San Ramon.",
@@ -644,7 +645,7 @@ page(path="/castro-valley/", label="Castro Valley", city="Castro Valley",
      title="Roofing Castro Valley, CA | CJ's Roofing",
      h1="Castro Valley Roofing Contractor",
      description="Shingle and tile roof repair and replacement, plus gutters, for Castro Valley homes. "
-                 "CJ's Roofing, San Ramon, since 1995. Call (925) 548-0932.",
+                 "CJ's Roofing, San Ramon, since 1995. Call (925) 205-6447.",
      hero="shingle-roof-newark-ridge",
      lead="CJ's Roofing works on shingle roofs, tile roofs and gutters in Castro Valley. From San Ramon it's a "
           "drive over Crow Canyon Road.",
@@ -678,7 +679,7 @@ page(path="/dublin/", label="Dublin", city="Dublin",
      title="Roofing Dublin, CA | Shingle & Tile Roofer | CJ's Roofing",
      h1="Dublin Roofing Contractor",
      description="Tile and shingle roof repair and replacement, plus gutters, for Dublin homes from West "
-                 "Dublin to Dublin Ranch. Next door in San Ramon. Call (925) 548-0932.",
+                 "Dublin to Dublin Ranch. Next door in San Ramon. Call (925) 205-6447.",
      hero="tile-roof-dublin-hills",
      lead="Dublin is right next door to San Ramon, and it's where many of the tile roof photos on this site were "
           "taken. CJ's Roofing works on Dublin's shingle roofs, tile roofs and gutters.",
@@ -716,7 +717,7 @@ page(path="/danville/", label="Danville", city="Danville",
      title="Roofing Danville, CA | Shingle & Tile Roofer | CJ's Roofing",
      h1="Danville Roofing Contractor",
      description="Shingle and tile roof repair and replacement, plus gutters, in Danville, Blackhawk and "
-                 "Diablo. San Ramon-based since 1995. Call Chris at (925) 548-0932.",
+                 "Diablo. San Ramon-based since 1995. Call Chris at (925) 205-6447.",
      hero="tile-roof-dublin-ridge-2",
      lead="Danville is San Ramon's neighbor to the north, a few minutes up I-680. CJ's Roofing repairs and replaces "
           "shingle and tile roofs and installs gutters there.",
@@ -750,7 +751,7 @@ page(path="/alamo/", label="Alamo", city="Alamo",
      title="Roofing Alamo, CA | Shingle & Tile Roofer | CJ's Roofing",
      h1="Alamo Roofing Contractor",
      description="Shingle and tile roof repair and replacement, plus gutters, for Alamo homes. "
-                 "CJ's Roofing, San Ramon, licensed since 1995. Call (925) 548-0932.",
+                 "CJ's Roofing, San Ramon, licensed since 1995. Call (925) 205-6447.",
      hero="tile-roof-dublin-closeup",
      lead="CJ's Roofing works on shingle roofs, tile roofs and gutters in Alamo, up I-680 past Danville from our base "
           "in San Ramon.",
@@ -797,7 +798,7 @@ page(path="/reviews/", label="Reviews",
      title="CJ's Roofing Reviews | San Ramon Roofer",
      h1="What Our Customers Say",
      description="Read CJ's Roofing reviews on Google and Yelp, or leave one. San Ramon roofing contractor "
-                 "since 1995. Call (925) 548-0932.",
+                 "since 1995. Call (925) 205-6447.",
      lead="Most of CJ's Roofing's work comes from people recommended by past customers. You can read what customers "
           "have written on Google and Yelp.",
      body="""
@@ -864,7 +865,7 @@ page(path="/roofing-faq/", label="Roofing FAQ",
      title="Roofing FAQ | CJ's Roofing",
      h1="Roofing Questions, Answered",
      description="Answers about CJ's Roofing: licence, services, areas, repairs vs replacement, solar prep and "
-                 "how to get an estimate. San Ramon, CA. Call (925) 548-0932.",
+                 "how to get an estimate. San Ramon, CA. Call (925) 205-6447.",
      lead="Short answers to the questions people ask Chris most. Anything not here, call or text {call}.",
      body="""
 [[faq]]
@@ -873,9 +874,9 @@ page(path="/roofing-faq/", label="Roofing FAQ",
 """)
 
 page(path="/contact-us/", layout="contact", label="Contact",
-     title="Contact CJ's Roofing | San Ramon | 925-548-0932",
+     title="Contact CJ's Roofing | San Ramon | 925-205-6447",
      h1="Contact CJ's Roofing",
-     description="Call or text Chris at CJ's Roofing on (925) 548-0932, or email customerservice@cjs-roofing.com. "
+     description="Call or text Chris at CJ's Roofing on (925) 205-6447, or email customerservice@cjs-roofing.com. "
                  "9672 Camassia Way, San Ramon, CA 94582.",
      lead="The fastest way to reach CJ's Roofing is to call or text Chris directly.",
      body="""
@@ -899,7 +900,7 @@ This policy explains what information CJ's Roofing ("we", "us") collects through
 
 ## What we collect
 
-This website has no contact form, no user accounts and no advertising or analytics tracking. We collect information only when you choose to contact us by phone, text message or email. That may include your name, phone number, email address, property address, photos of your roof, and whatever details you choose to send.
+This website has no contact form, no user accounts and no advertising or analytics tracking. Calls to the phone number on this site go through a call-tracking service and may be recorded for quality purposes; callers hear a short notice first. We collect information only when you choose to contact us by phone, text message or email. That may include your name, phone number, email address, property address, photos of your roof, and whatever details you choose to send.
 
 Like most websites, our hosting provider may automatically record standard technical information such as IP address, browser type and the pages requested, for security and to keep the site running.
 
