@@ -632,6 +632,36 @@ def clean_out():
         shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
 
 
+PAGEDROP = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pagedrop")
+
+
+def merge_pagedrop():
+    """Pages from Emre's content system (site 692 in his tool, published monthly on the 1st into
+    /srv/pagedrop/cjs-roofing on Hetzner, mirrored into ./pagedrop by the server's sync job).
+    They are copied into the site as they are. A path this build already made wins — the system's page
+    for that URL is skipped, never overwritten into ours. Its robots.txt and sitemap.xml are ignored
+    (ours decide indexing). Returns the new page paths, for the sitemap."""
+    added = []
+    if not os.path.isdir(PAGEDROP):
+        return added
+    for root, _, files in os.walk(PAGEDROP):
+        for f in files:
+            src = os.path.join(root, f)
+            rel = os.path.relpath(src, PAGEDROP)
+            if rel in ("robots.txt", "sitemap.xml"):
+                continue
+            dst = os.path.join(OUT, rel)
+            if os.path.exists(dst):
+                continue
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copyfile(src, dst)
+            if f == "index.html":
+                added.append("/" + os.path.dirname(rel).replace(os.sep, "/").strip("/") + "/")
+    if added:
+        print(f"  + {len(added)} pages from the content system")
+    return sorted(added)
+
+
 def write(rel, text):
     p = os.path.join(OUT, rel.lstrip("/"))
     os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -663,8 +693,10 @@ def main():
     write("/404.html", render_page(nf, css_href, font_href))
 
     today = datetime.date.today().isoformat()
+    extra = merge_pagedrop()
     urls = "".join(f"<url><loc>{DOMAIN}{p['path']}</loc><lastmod>{today}</lastmod></url>"
                    for p in C.PAGES if p.get("in_sitemap", True))
+    urls += "".join(f"<url><loc>{DOMAIN}{p}</loc><lastmod>{today}</lastmod></url>" for p in extra)
     write("/sitemap.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
     if INDEXABLE:
         write("/robots.txt", f"User-agent: *\nDisallow: /thank-you/\n\nSitemap: {DOMAIN}/sitemap.xml\n")
