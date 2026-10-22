@@ -4,7 +4,7 @@
 :root{
   --ink:#15181c; --ink-2:#434b55; --muted:#69717a;
   --bg:#fff; --grey:#f4f3f1; --line:#e4e0da;
-  --red:#a8391f; --red-dk:#852b16; --gold:#f0b541; --dark:#1b1f24;
+  --red:#002244; --red-dk:#00152b; --gold:#69be28; --dark:#0a1626;
   --max:1180px; --head:"Teko","Arial Narrow",Impact,sans-serif;
 }
 *{box-sizing:border-box}
@@ -351,3 +351,9 @@ footer.site .legal a{color:#fff;font-weight:400}
 
   .actbar{left:auto;right:18px;width:370px}
 }
+
+/* 23 Oct 2026 - Seahawks colours (Chris, 7 Oct call): College Navy #002244, Action Green #69BE28, Wolf Grey #A5ACAF.
+   4 service groups now, so the strip is 4 across and the service cards 2 x 2 on desktop. */
+.hl{color:#3f7f17}   /* Action Green darkened for readable text on white */
+footer.site .legal{background:#00152b;color:#a5acaf}
+@media (min-width:960px){.strip{grid-template-columns:repeat(4,1fr)}.strip a{font-size:1.7rem;padding:28px 14px}.svc{grid-template-columns:repeat(2,1fr)}}

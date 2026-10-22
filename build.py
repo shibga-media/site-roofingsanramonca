@@ -52,10 +52,11 @@ IC = {
     "star": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z"/></svg>',
     "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>',
     "burger": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
-    "logo": '<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="4" fill="#a8391f"/><path d="M6 22 20 10l14 12" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 27.5 20 20l9 7.5" fill="none" stroke="#f0b541" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    "logo": '<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="4" fill="#002244"/><path d="M6 22 20 10l14 12" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 27.5 20 20l9 7.5" fill="none" stroke="#69be28" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     "shingle": f'<svg {_O}><path d="M4 24 24 7l20 17"/><path d="M11 22h26M9 28h30M8 34h32"/><path d="M17 22v6M31 22v6M13 28v6M24 28v6M35 28v6"/></svg>',
     "tile": f'<svg {_O}><path d="M4 24 24 7l20 17"/><path d="M8 30c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/><path d="M8 38c2.5-4 5.5-4 8 0s5.5 4 8 0 5.5-4 8 0 5.5 4 8 0"/></svg>',
     "gutters": f'<svg {_O}><path d="M4 14h40"/><path d="M6 18h36v5a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M34 26v14"/><path d="M34 40h6"/><path d="M20 32c0 2-1.5 3.5-3 3.5S14 34 14 32s3-6 3-6 3 4 3 6z"/></svg>',
+    "care": f'<svg {_O}><path d="M4 24 24 7l20 17"/><path d="M10 20v20h28V20"/><path d="M19 40V30h10v10"/><path d="M33 6v6M30 9h6"/></svg>',
     "owner": f'<svg {_O}><circle cx="24" cy="15" r="7"/><path d="M10 41c1.5-8 7-12 14-12s12.5 4 14 12"/></svg>',
     "focus": f'<svg {_O}><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="1.5" fill="currentColor"/></svg>',
     "badge": f'<svg {_O}><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="M16.5 24l5 5 10-11"/></svg>',
@@ -79,6 +80,13 @@ SERVICES = [  # home + services hub cards: icon, url, name, blurb, sub-pages, ca
      "New gutters and downspouts, and repairs to leaking, sagging or loose gutters.",
      [("/services/gutters/seamless-gutter-installation/", "Seamless gutter installation"),
       ("/services/gutters/gutter-repair/", "Gutter repair")], None),
+    ("care", "/services/roof-maintenance/", "Roof Maintenance & Repairs",   # added 23 Oct 2026 (Chris, 7 Oct call)
+     "Moss removal and roof washing, dry rot and fascia repair, roof coating, skylights and attic venting.",
+     [("/services/roof-maintenance/moss-removal-pressure-washing/", "Moss removal & roof washing"),
+      ("/services/roof-maintenance/dry-rot-fascia-repair/", "Dry rot & fascia repair"),
+      ("/services/roof-maintenance/roof-coating/", "Roof coating"),
+      ("/services/roof-maintenance/skylights/", "Skylight installation & repair"),
+      ("/services/roof-maintenance/attic-ventilation/", "Attic ventilation")], None),
 ]
 CITY_PAGES = [("/dublin/", "Dublin"), ("/danville/", "Danville"), ("/pleasanton/", "Pleasanton"),
               ("/alamo/", "Alamo"), ("/castro-valley/", "Castro Valley"), ("/fremont/", "Fremont")]
@@ -414,7 +422,7 @@ def head(pg, css_href, font_href):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{E(S["name"])}">
 <meta property="og:title" content="{E(pg["title"])}"><meta property="og:description" content="{E(pg["description"])}">
 <meta property="og:url" content="{canon}"><meta property="og:image" content="{og_url}">
-<meta name="theme-color" content="#a8391f">
+<meta name="theme-color" content="#002244">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {preload}<link rel="stylesheet" href="{css_href}">
 {ld_scripts(pg)}
@@ -478,7 +486,7 @@ def aside(pg):
 
 
 def reviews_band():
-    return f"""<section class="revband"><svg class="divider" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,44 1000,6 1000,16 0,54" fill="#a8391f"/><polygon points="0,54 1000,16 1000,24 0,60" fill="#1b1f24"/><polygon points="0,60 1000,24 1000,60" fill="#f0b541"/></svg><div class="wrap"><div class="rev-in">
+    return f"""<section class="revband"><svg class="divider" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,44 1000,6 1000,16 0,54" fill="#002244"/><polygon points="0,54 1000,16 1000,24 0,60" fill="#0a1626"/><polygon points="0,60 1000,24 1000,60" fill="#69be28"/></svg><div class="wrap"><div class="rev-in">
 <div class="rev-img">{img_tag(REVIEW_PHOTO, "(min-width:960px) 340px, 240px")}</div>
 <div class="rev-txt"><h2>What our customers <span class="hl">say</span></h2>
 <p>Most of CJ's Roofing's work comes from people recommended by past customers. Read what customers have written, with their names and dates, where they wrote it.</p>
@@ -516,7 +524,7 @@ def render_home(pg):
         f'Texting? Add a couple of photos of the problem area and your address.</p>'
         f'<ul class="ticks"><li>{IC["check"]}In business since July 1995</li>'
         f'<li>{IC["check"]}CSLB Lic. #{S["license"]}, C-39 Roofing</li>'
-        f'<li>{IC["check"]}Shingle roofs, tile roofs &amp; gutters</li></ul>{call_btns(call_label="Call Chris")}')
+        f'<li>{IC["check"]}Shingle &amp; tile roofs, gutters, roof repairs</li></ul>{call_btns(call_label="Call Chris")}')
     strip = "".join(f'<a href="{u}">{IC[i]}<span>{E(n)}</span></a>' for i, u, n, _, _, _ in SERVICES)
     out = [f"""<main id="main">
 <section class="hero"><div class="hero-media slash"><div class="hm">{img_tag(hero, hero_sizes(pg), eager=True)}</div></div>

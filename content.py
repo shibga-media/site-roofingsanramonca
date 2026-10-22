@@ -109,12 +109,12 @@ FAQ = [
      "Yes. CJ's Roofing holds California contractor licence #709867, classification C-39 Roofing, issued "
      "in July 1995. You can check it yourself on the [CSLB website](https://www.cslb.ca.gov/709867)."),
     ("What kinds of roofs do you work on?",
-     "Asphalt shingle roofs and tile roofs (concrete and clay), plus gutters. That's the whole list."),
+     "Asphalt shingle roofs and tile roofs (concrete and clay), gutters, and the repairs around them: moss removal, dry rot and fascia, roof coating, skylights and attic ventilation."),
     ("Do you install metal roofs?",
      "No. Metal panels scratch when people walk on them during work, and Chris would rather not hand "
      "you a roof that's marked up on day one. If you want metal, we're not the right company."),
     ("Do you do siding, remodeling or other home work?",
-     "No. Roofing and gutters only."),
+     "No. We don't do siding, framing or remodeling. Chris refers that work out."),
     ("Do you do repairs, or only full roofs?",
      "Both. Leaks, broken or slipped tiles, missing shingles, flashing and gutter problems are all "
      "repair work we take on. If a repair won't solve the problem, Chris will tell you."),
@@ -161,7 +161,7 @@ page(path="/", layout="home", label="Home",
 ## Why San Ramon homeowners call Chris
 
 - **You talk to the owner.** Calls to this number ring straight through to Chris. The person you talk to is the person answering for the work.
-- **We stick to what we know.** Shingle roofs, tile roofs and gutters. No metal roofs, no siding, no remodeling.
+- **We stick to what we know.** Shingle roofs, tile roofs, gutters and roof repairs. No metal roofs, no siding, no framing.
 - **Licensed since 1995.** California contractor licence #709867, C-39 Roofing. [Check it on the CSLB site](https://www.cslb.ca.gov/709867).
 - **Local.** San Ramon is home. Most of our service area is a short drive up or down I-680.
 
@@ -195,13 +195,13 @@ page(path="/about-us/", label="About",
      body="""
 ## Owner-run from day one
 
-CJ's Roofing is a small company on purpose. When you call {call}, you reach Chris, and he stays your contact from the first call until the job is done. His son works alongside him at times.
+Chris started out as a union roofer at around 20 and got his own contractor licence in July 1995. CJ's Roofing is a small company on purpose. When you call {call}, you reach Chris, and he stays your contact from the first call until the job is done. His son works alongside him at times.
 
 Most of Chris's work has always come from word of mouth: past customers passing his number to neighbors, friends and family. This website exists so the people those customers talk to can find him more easily.
 
 ## What we do, and what we don't
 
-We work on asphalt shingle roofs, tile roofs and gutters. That's it. Chris doesn't install metal roofs, because metal scratches when people move around on it during the work, and he'd rather turn a job down than leave a roof marked up. We don't do siding or remodeling either.
+We work on asphalt shingle roofs, tile roofs and gutters, plus the jobs around them: moss removal, dry rot and fascia repair, roof coating, skylights and attic ventilation. Chris doesn't install metal roofs, because metal scratches when people move around on it during the work, and he'd rather turn a job down than leave a roof marked up. We don't do siding, framing or remodeling either. Chris refers that work out.
 
 See all [roofing and gutter services](/services/).
 
@@ -221,9 +221,9 @@ CJ's Roofing is licensed by the California Contractors State License Board: lice
 page(path="/services/", label="Services",
      title="Roofing & Gutter Services | CJ's Roofing",
      h1="Roofing and Gutter Services",
-     description="Shingle roof repair and replacement, tile roof repair and replacement, and gutter "
-                 "installation and repair from CJ's Roofing, San Ramon, CA. Call (925) 205-6447.",
-     lead="CJ's Roofing does three things: asphalt shingle roofs, tile roofs and gutters. Pick the one you need below, "
+     description="Shingle and tile roof repair and replacement, gutters, moss removal, dry rot repair, skylights and roof "
+                 "coating from CJ's Roofing, San Ramon, CA. Call (925) 205-6447.",
+     lead="CJ's Roofing works on asphalt shingle roofs, tile roofs, gutters and roof repairs. Pick the one you need below, "
           "or just call Chris and describe the problem.",
      body="""
 [[services]]
@@ -234,7 +234,7 @@ A leak doesn't always come from where the stain on the ceiling is. Water can run
 
 ## What we don't do
 
-No metal roofing, no siding, no remodeling. If your project is one of those, we'd rather tell you now than waste your time.
+No metal roofing, no siding, no framing, no remodeling. If your project is one of those, we'd rather tell you now than waste your time.
 
 [[cta]]
 """)
@@ -480,7 +480,7 @@ page(path="/services/gutters/", label="Gutters", service="gutters",
      h1="Seamless Gutters and Gutter Repair in San Ramon",
      description="Gutter installation and gutter repair in San Ramon and the Tri-Valley from CJ's Roofing. "
                  "Owner-run roofing company since 1995. Call (925) 205-6447.",
-     lead="Gutters are the only work CJ's Roofing does besides roofs, and they belong together: a roof sheds the "
+     lead="Gutters and roofs belong together: a roof sheds the "
           "water, and gutters carry it away from the house.",
      body="""
 ## Why gutters matter here
@@ -563,6 +563,192 @@ If the gutters are sound apart from a problem or two, repair them. If they are l
 ## Gutters and roof leaks
 
 Sometimes what looks like a roof leak is a gutter problem: water backing up over the edge and running behind the fascia into the wall or eaves. Chris looks at both, since he works on both.
+
+[[cta]]
+""")
+
+# ---- Roof maintenance & repairs (added 23 Oct 2026: services Chris named on the 7 Oct call) ----
+
+page(path="/services/roof-maintenance/", label="Roof Maintenance & Repairs", service="care",
+     title="Roof Maintenance & Repairs San Ramon, CA | CJ's Roofing",
+     h1="Roof Maintenance and Repairs in San Ramon",
+     description="Moss removal and roof washing, dry rot and fascia repair, roof coating, skylights and attic "
+                 "ventilation from CJ's Roofing, San Ramon. Owner-run since 1995. Call (925) 205-6447.",
+     lead="Not every roof problem means a new roof. These are the jobs that keep a roof working and fix the parts "
+          "around it.",
+     body="""
+## Maintenance and repair services
+
+- [Moss removal and roof washing](/services/roof-maintenance/moss-removal-pressure-washing/)
+- [Dry rot and fascia repair](/services/roof-maintenance/dry-rot-fascia-repair/)
+- [Roof coating](/services/roof-maintenance/roof-coating/)
+- [Skylight installation and repair](/services/roof-maintenance/skylights/)
+- [Attic ventilation](/services/roof-maintenance/attic-ventilation/)
+
+## Why small jobs matter
+
+Moss holds water against the roof. Rotten fascia lets gutters pull away. A tired skylight seal or a poorly vented attic can shorten the life of the whole roof. Dealing with these early is usually far cheaper than waiting until they cause a leak.
+
+## Not sure what you need?
+
+Call or text {call} and describe what you're seeing. If you can, send a couple of photos. Chris will tell you what he'd look at first.
+
+[[cta]]
+""")
+
+page(path="/services/roof-maintenance/moss-removal-pressure-washing/", label="Moss Removal & Roof Washing", service="care",
+     title="Roof Moss Removal & Roof Washing San Ramon | CJ's Roofing",
+     h1="Moss Removal and Roof Washing",
+     description="Roof moss removal and roof washing in San Ramon and the Tri-Valley from CJ's Roofing, "
+                 "owner-run since 1995. Call Chris at (925) 205-6447.",
+     lead="Moss, algae and debris build up on shady roofs. Cleaning them off helps the roof shed water the way it "
+          "was built to.",
+     body="""
+## Why moss is a problem
+
+Moss acts like a sponge. It holds rainwater against the roof long after a storm, and it grows into the gaps between shingles and tiles. Over time it can lift shingle edges, block the channels water drains through on a tile roof, and push debris into the gutters.
+
+Shady roofs under oaks and other mature trees are the most likely to grow it, and the Tri-Valley has plenty of those.
+
+## What the job involves
+
+- Clearing moss, leaves and debris off the roof surface
+- Washing the roof with the right method for the material, since shingles and tile need different care
+- Clearing what washes down out of the gutters and downspouts
+- Checking for damage the moss was hiding, such as lifted shingles or cracked tiles
+
+## Shingle and tile
+
+Asphalt shingles are easy to damage with too much pressure, which strips the granules that protect them. Tile can crack if it is walked on the wrong way. Chris works on both kinds of roof every day, so the cleaning is matched to the roof.
+
+## Before solar
+
+A clean roof is also a good starting point before solar panels go on. See the solar-prep photos in our [gallery](/gallery/).
+
+[[cta]]
+""")
+
+page(path="/services/roof-maintenance/dry-rot-fascia-repair/", label="Dry Rot & Fascia Repair", service="care",
+     title="Dry Rot & Fascia Board Repair San Ramon | CJ's Roofing",
+     h1="Dry Rot and Fascia Repair",
+     description="Dry rot repair for fascia boards, eaves and roof edges in San Ramon and the Tri-Valley. "
+                 "CJ's Roofing, owner-run since 1995. Call (925) 205-6447.",
+     lead="The wood along the roof edge takes the water a roof sheds. When it stays wet, it rots, and the gutters "
+          "and roof edge lose what holds them.",
+     body="""
+## Where dry rot shows up
+
+- **Fascia boards**, the boards along the roof edge that the gutters are fastened to
+- **Eaves and rafter tails**, where an overflowing gutter or a roof leak keeps the wood wet
+- **Roof deck edges**, found when the roof is opened up for a repair or re-roof
+
+## Signs to look for
+
+- Paint peeling or bubbling along the roof edge
+- Wood that is soft, cracked or crumbling when pressed
+- Gutters sagging or pulling away from the house
+- Dark stains below the gutter line
+
+## Fix the cause, not just the board
+
+Rotten wood is almost always a water problem first: an overflowing or leaking [gutter](/services/gutters/gutter-repair/), a gap in the roof edge flashing, or a roof leak. Replacing the board without fixing the water just means doing it again. Chris looks at the roof edge and the gutters together, since he works on both.
+
+## Repairs are often part of a bigger job
+
+Damaged wood often turns up during a [shingle](/services/shingle-roofing/) or [tile](/services/tile-roofing/) roof job. It gets replaced before the new roof or gutters go over it.
+
+[[cta]]
+""")
+
+page(path="/services/roof-maintenance/roof-coating/", label="Roof Coating", service="care",
+     title="Roof Coating San Ramon, CA | CJ's Roofing",
+     h1="Roof Coating",
+     description="Roof coating in San Ramon and the Tri-Valley from CJ's Roofing. Ask Chris whether a coating "
+                 "suits your roof. Owner-run since 1995. Call (925) 205-6447.",
+     lead="A roof coating is a liquid-applied layer that seals and protects the roof surface. On the right roof, it "
+          "can add years before a replacement is needed.",
+     body="""
+## Where a coating makes sense
+
+Coatings are most often used on low-slope and flat roof sections, such as porch roofs, additions and bungalows, where water drains slowly. A coating can seal small cracks and seams and reflect some of the summer sun.
+
+## Where it doesn't
+
+A coating is not a fix for a roof that is worn out, has soft decking, or has active leaks that haven't been found and repaired. Coating over those problems just hides them. Chris will tell you whether your roof is a good candidate or whether a repair or replacement is the better spend.
+
+## What the job involves
+
+- Inspecting the roof and repairing any damage first
+- Cleaning the surface so the coating bonds
+- Sealing seams, edges and penetrations
+- Applying the coating evenly over the roof
+
+## Color
+
+Coatings come in a range of colors. If you live in an HOA, check what it allows before you choose.
+
+[[cta]]
+""")
+
+page(path="/services/roof-maintenance/skylights/", label="Skylight Installation & Repair", service="care",
+     title="Skylight Installation & Repair San Ramon | CJ's Roofing",
+     h1="Skylight Installation and Repair",
+     description="Skylight installation, skylight leak repair and replacement in San Ramon and the Tri-Valley "
+                 "from CJ's Roofing, since 1995. Call (925) 205-6447.",
+     lead="A skylight is a hole in the roof by design. Whether it lets in light or water comes down to how it is "
+          "flashed and sealed.",
+     body="""
+## Skylight repair
+
+Most skylight leaks are not the glass. They come from the flashing around the skylight frame or a seal that has dried out in the sun. Signs of a problem:
+
+- Water stains on the ceiling or drywall around the skylight
+- Drips or condensation running down the shaft
+- Cracked, fogged or damaged glass or dome
+- Old caulk or patches around the frame on the roof
+
+Chris finds where the water is really getting in and fixes that, rather than adding more sealant on top.
+
+## Skylight installation and replacement
+
+A new skylight, or a replacement for an old one, has to be tied into the roof properly: the opening framed, the unit set, and the flashing worked into the shingles or tiles around it. On a tile roof that means lifting and resetting tiles around the opening.
+
+## During a re-roof
+
+If you are replacing your roof, it is the right time to replace or reflash an older skylight, so the new roof and the skylight are sealed together.
+
+[[cta]]
+""")
+
+page(path="/services/roof-maintenance/attic-ventilation/", label="Attic Ventilation", service="care",
+     title="Attic Ventilation & Roof Vents San Ramon | CJ's Roofing",
+     h1="Attic Ventilation",
+     description="Attic ventilation and roof vent installation and repair in San Ramon and the Tri-Valley "
+                 "from CJ's Roofing, since 1995. Call (925) 205-6447.",
+     lead="An attic needs to breathe. Air coming in low and going out high keeps heat and moisture from building "
+          "up under the roof.",
+     body="""
+## Why it matters
+
+In a Tri-Valley summer, a poorly vented attic gets very hot. That heat cooks shingles from underneath and makes the rooms below harder to cool. In winter, trapped moisture can condense on the underside of the roof deck and lead to mold and rot.
+
+## Signs of a ventilation problem
+
+- An attic that feels much hotter than outside on a summer day
+- Damp insulation, mold or rust on nails in the attic
+- Shingles aging faster than they should
+- Vents that are blocked, damaged or missing
+
+## What we do
+
+- Check the intake vents at the eaves and the exhaust vents up high
+- Repair or replace damaged roof vents and their flashing
+- Add or change vents so air can move through the attic
+- Make sure insulation is not blocking the eave vents
+
+## Ventilation and a new roof
+
+Ventilation is part of every roof replacement, so a re-roof is the easiest time to get it right. See [shingle roof replacement](/services/shingle-roofing/shingle-roof-replacement/) and [tile roof replacement](/services/tile-roofing/tile-roof-replacement/).
 
 [[cta]]
 """)
